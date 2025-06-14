@@ -1,0 +1,108 @@
+version: "3.8"
+
+services:
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - VPNSP=nordvpn
+      - OPENVPN_USER=zt2vsixwbdSvMaqpLUyETAjc   # Ensure credentials are correct and secure
+      - OPENVPN_PASSWORD=fM6obHPsgUHzdakqJiQ4EsgC
+      - TZ=Europe/Oslo
+      - SERVER_REGIONS=Norway
+      - OPENVPN_PROTOCOL=udp
+      - HEALTHCHECK_INTERVAL=10s
+      - HEALTHCHECK_TIMEOUT=5s
+      - HEALTHCHECK_RETRIES=5
+    ports:
+      - "8001:8000"
+      - "6881:6881/tcp"
+      - "6881:6881/udp"
+      - "8080:8080"    # qBittorrent Web UI
+      - "8989:8989"    # Sonarr
+      - "7878:7878"    # Radarr
+      - "9696:9696"    # Prowlarr
+    volumes:
+      - /media/klaos/externalhdd/media-server/config/gluetun:/gluetun
+    restart: unless-stopped
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent
+    container_name: qbittorrent
+    network_mode: "service:gluetun"    # Routes all qbittorrent traffic through gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Oslo
+      - WEBUI_PORT=8080
+      - QBT_WEBUI_HOST=0.0.0.0
+    volumes:
+      - ./qbittorrent/config:/config
+      - ./downloads:/downloads
+    restart: unless-stopped
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    network_mode: "service:gluetun"    # Routes all prowlarr traffic through gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Oslo
+    volumes:
+      - ./config/prowlarr:/config
+    restart: unless-stopped
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    network_mode: "service:gluetun"    # Routes all sonarr traffic through gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Oslo
+    volumes:
+      - ./config/sonarr:/config
+      - ./tv:/tv
+      - ./downloads:/downloads
+    restart: unless-stopped
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    network_mode: "service:gluetun"    # Routes all radarr traffic through gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Oslo
+    volumes:
+      - ./config/radarr:/config
+      - ./movies:/movies
+      - ./downloads:/downloads
+    restart: unless-stopped
+
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    user: "1000:1000"    # Ensure this matches your PUID/PGID
+    ports:
+      - "8096:8096"      # Jellyfin main port exposed directly
+    volumes:
+      - ./config/jellyfin:/config
+      - ./cache/jellyfin:/cache
+      - ./tv:/data/tvshows
+      - ./movies:/data/movies
+    restart: unless-stopped
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    command: -H unix:///var/run/docker.sock
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./config/portainer_data:/data
+    restart: unless-stopped
