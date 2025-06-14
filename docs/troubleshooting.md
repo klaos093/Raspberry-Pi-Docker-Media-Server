@@ -275,5 +275,3 @@ The external SSD/HDD ran out of space, causing file corruption and making contai
 * For configuration resets, stop the container, remove config folders, and redeploy.
 
 ---
-
-If you want, I can help you generate a set of scripts or commands to automate some of these fixes. Would you like that?
