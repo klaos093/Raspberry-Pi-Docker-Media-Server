@@ -223,5 +223,3 @@ Refer to our [Troubleshooting Guide](../docs/troubleshooting.md) for common fixe
 * **Sonarr, Radarr, Prowlarr Guides**: [https://linuxserver.io/](https://linuxserver.io/)
 
 ---
-
-Let me know if you want me to draft the `docker-compose.yml` or the troubleshooting.md content next!
