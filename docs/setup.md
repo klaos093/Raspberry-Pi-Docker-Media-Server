@@ -174,7 +174,7 @@ docker run --rm --network container:gluetun curlimages/curl ifconfig.me
 
 ## 6. Deploy Media Services
 
-Add the following services to your [`docker-compose.yml`](../docs/docker-compose.yml)
+Add the following services to your [`docker-compose.yml`](../docker-compose/docker-compose.yml)
 
 * qBittorrent (networked through Gluetun)
 * Radarr
