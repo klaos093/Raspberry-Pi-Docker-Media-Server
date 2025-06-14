@@ -50,13 +50,12 @@ This setup ensures that media is automatically fetched, securely downloaded, nea
 
 | Path                          | Description                                               |
 |------------------------------|-----------------------------------------------------------|
-| 📂 `docker-compose/`         | YAML files for all containers (Gluetun, Jellyfin, etc.)   |
-| 📂 `configs/`                | Configuration files for each service                      |
-| 📂 `logs/`                   | Sample logs and troubleshooting examples                  |
-| 📂 `docs/`                   | Documentation and setup notes                             |
-| 📜 `README.md`               | Project overview and setup instructions                   |
-| 📜 `LICENSE`                 | Open-source license (MIT recommended)                     |
-
+| 📂 [`docker-compose/`](./docker-compose/) | `.yml` files for all containers (Gluetun, Jellyfin, etc.)   |
+| 📂 [`configs/`](./configs/)                | Configuration files for each service                      |
+| 📂 [`logs/`](./logs/)                      | Sample logs and troubleshooting examples                  |
+| 📂 [`docs/`](./docs/)                      | Documentation and setup notes                             |
+| 📜 [`README.md`](./README.md)              | Project overview and setup instructions                   |
+| 📜 [`LICENSE`](./LICENSE)                  | Open-source license (MIT recommended)        
 ---
 
 ## 📢 Why This Project is Great for Your Portfolio?
